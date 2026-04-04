@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         CI = 'true'
+        VERCEL_HOOK_URL = credentials('VERCEL_HOOK_URL')
     }
 
     stages {
@@ -14,7 +15,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm ci'  // Use npm ci for faster and more reliable CI builds
+                bat 'npm ci'
             }
         }
 
@@ -30,37 +31,26 @@ pipeline {
             }
         }
 
-        stage('confirm') {
-            steps {
-                echo 'ready to deploy to vercel'
-            }
-        }
-
-        stage('Deploy to Vercel') {
+        stage('Trigger Vercel Deployment') {
             when {
-                branch 'main'  // Only deploy on main branch
-            }
-            environment {
-                VERCEL_TOKEN = credentials('VERCEL_TOKEN')
+                branch 'main'
             }
             steps {
-                echo '🚀 Deploying React app to Vercel...'
-                bat 'npx vercel --prod --token %VERCEL_TOKEN% --yes'
-                echo '✅ Deployment completed!'
+                echo '✅ All tests passed. Triggering Vercel production deployment...'
+                bat 'curl -X POST %VERCEL_HOOK_URL%'
             }
         }
     }
 
     post {
         always {
-            // Clean up workspace
             cleanWs()
         }
         success {
-            echo '🎉 Pipeline completed successfully!'
+            echo '🎉 Pipeline succeeded! Vercel deployment has been triggered.'
         }
         failure {
-            echo '❌ Pipeline failed!'
+            echo '❌ Pipeline failed. Deployment to Vercel was NOT triggered.'
         }
     }
 }
