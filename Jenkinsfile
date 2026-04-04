@@ -30,6 +30,12 @@ pipeline {
             }
         }
 
+        stage('confirm') {
+            steps {
+                echo 'ready to deploy to vercel'
+            }
+        }
+
         stage('Deploy to Vercel') {
             when {
                 branch 'main'  // Only deploy on main branch
