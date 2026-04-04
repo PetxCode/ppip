@@ -15,20 +15,20 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'nvm install ${NODE_VERSION} && nvm use ${NODE_VERSION}'
-                sh 'npm ci'  // Use npm ci for faster and more reliable CI builds
+                bat 'nvm install %NODE_VERSION% && nvm use %NODE_VERSION%'
+                bat 'npm ci'  // Use npm ci for faster and more reliable CI builds
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'npm test -- --ci --coverage'
+                bat 'npm test -- --ci --coverage'
             }
         }
 
