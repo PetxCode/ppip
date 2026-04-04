@@ -30,26 +30,16 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Vercel') {
             when {
                 branch 'main'  // Only deploy on main branch
             }
+            environment {
+                VERCEL_TOKEN = credentials('VERCEL_TOKEN')
+            }
             steps {
-                echo '🚀 Deploying React app...'
-
-                // Example 1: Deploy to Vercel
-                // sh 'npx vercel --prod --token $VERCEL_TOKEN'
-
-                // Example 2: Deploy to Netlify
-                // sh 'npx netlify deploy --prod --dir=build --message="Deploy from Jenkins"'
-
-                // Example 3: Upload build to S3 (AWS)
-                // sh '''
-                //     aws s3 sync build/ s3://your-bucket-name \
-                //     --delete \
-                //     --cache-control "max-age=31536000,public"
-                // '''
-
+                echo '🚀 Deploying React app to Vercel...'
+                bat 'npx vercel --prod --token %VERCEL_TOKEN% --yes'
                 echo '✅ Deployment completed!'
             }
         }
