@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        NODE_VERSION = '20'  // Change to 18 or 22 if needed
         CI = 'true'
     }
 
@@ -15,7 +14,6 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'nvm install %NODE_VERSION% && nvm use %NODE_VERSION%'
                 bat 'npm ci'  // Use npm ci for faster and more reliable CI builds
             }
         }
