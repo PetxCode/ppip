@@ -85,3 +85,14 @@ pipeline {
         }
     }
 }
+
+
+// server {
+//         listen 80;
+//         listen [::]:80;
+
+//         root /home/ubuntu/app-deploy/dist;
+//         location / {
+//                 try_files $uri /index.html
+//         }
+// }
